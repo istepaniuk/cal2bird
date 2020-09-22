@@ -1,0 +1,15 @@
+{
+    "name": "istepaniuk/cal2bird",
+    "description": "iCal to MoneyBird timesheet exporter",
+    "type": "project",
+    "license": "GPL-v3",
+    "authors": [
+        {
+            "name": "Ivan Stepaniuk",
+            "email": "me@istepaniuk.com"
+        }
+    ],
+    "require": {
+        "kigkonsult/icalcreator": "^2.29"
+    }
+}
