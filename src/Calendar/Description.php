@@ -4,8 +4,20 @@ namespace CalBird\Calendar;
 
 final class Description
 {
-    public static function fromString(string $string): self
+    private string $description;
+
+    private function __construct(string $description)
     {
-        return new self();
+        $this->description = $description;
+    }
+
+    public static function fromString(string $description): self
+    {
+        return new self($description);
+    }
+
+    public function matches(self $description): bool
+    {
+        return $description->description == $this->description;
     }
 }

@@ -55,4 +55,20 @@ final class CalendarToTimesheetConnectorTest extends TestCase
 
         $this->destination->save(Argument::any())->shouldHaveBeenCalledOnce();
     }
+
+    public function test_it_does_not_creates_a_time_entry_if_the_event_description_does_not_match()
+    {
+        $this->source->add(
+            new Event(
+                EventId::fromString('test-id'),
+                Description::fromString('A project'),
+                $start = new DateTimeImmutable('2020-01-01 10:00:00'),
+                $end = new DateTimeImmutable('2020-01-01 12:00:00')
+            )
+        );
+
+        $this->connector->createMatchingTimeEntries(Description::fromString('Unknown project'));
+
+        $this->destination->save(Argument::any())->shouldNotHaveBeenCalled();
+    }
 }

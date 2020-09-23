@@ -21,7 +21,9 @@ final class CalendarToTimesheetConnector
     public function createMatchingTimeEntries(Description $description): void
     {
         foreach ($this->source->events() as $event) {
-            $this->destination->save(new TimeEntry());
+            if ($event->descriptionMatches($description)) {
+                $this->destination->save(new TimeEntry());
+            }
         }
     }
 }
