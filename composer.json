@@ -1,6 +1,6 @@
 {
     "name": "istepaniuk/cal2bird",
-    "description": "iCal to MoneyBird timesheet exporter",
+    "description": "iCalendar to MoneyBird timesheet connector",
     "type": "project",
     "license": "GPL-v3",
     "authors": [
