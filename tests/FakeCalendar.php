@@ -11,13 +11,23 @@ final class FakeCalendar implements Calendar
 {
     private Events $events;
 
-    public function __construct(Event $event)
+    public function __construct(Event ...$event)
     {
-        $this->events = Events::fromArray($event);
+        $this->events = Events::fromArray(...$event);
     }
 
     public function events(): Events
     {
         return $this->events;
+    }
+
+    public function empty(): void
+    {
+        $this->events = Events::empty();
+    }
+
+    public function add(Event $event)
+    {
+        $this->events->add($event);
     }
 }

@@ -27,4 +27,9 @@ final class Events implements \IteratorAggregate
     {
         return new ArrayIterator($this->events);
     }
+
+    public function add(Event $event): void
+    {
+        $this->events[] = $event;
+    }
 }

@@ -5,8 +5,8 @@ namespace CalBird;
 
 use CalBird\Calendar\Calendar;
 use CalBird\Calendar\Description;
-use CalBird\MoneyBird\TimeEntry;
-use CalBird\MoneyBird\TimeSheet;
+use CalBird\TimeSheet\TimeEntry;
+use CalBird\TimeSheet\TimeSheet;
 
 final class CalendarToTimesheetConnector
 {
