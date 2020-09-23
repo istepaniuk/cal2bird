@@ -1,8 +1,8 @@
 <?php
 
-namespace CalBird\TimeSheet;
+namespace CalBird\Timesheet;
 
-interface TimeSheet
+interface Timesheet
 {
     public function save(TimeEntry $entry): void;
 }

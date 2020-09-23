@@ -2,10 +2,10 @@
 
 namespace CalBird;
 
-use CalBird\TimeSheet\TimeEntry;
-use CalBird\TimeSheet\TimeSheet;
+use CalBird\Timesheet\TimeEntry;
+use CalBird\Timesheet\Timesheet;
 
-final class MoneybirdTimesheet implements TimeSheet
+final class MoneybirdTimesheet implements Timesheet
 {
     public function save(TimeEntry $entry): void
     {

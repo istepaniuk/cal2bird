@@ -6,7 +6,7 @@ use CalBird\Calendar\Event;
 use CalBird\Calendar\EventId;
 use CalBird\Calendar\Summary;
 use CalBird\CalendarToTimesheetConnector;
-use CalBird\TimeSheet\TimeSheet;
+use CalBird\Timesheet\Timesheet;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
@@ -23,7 +23,7 @@ final class CalendarToTimesheetConnectorTest extends TestCase
     public function setUp(): void
     {
         $this->source = new FakeCalendar();
-        $this->destination = $this->prophesize(TimeSheet::class);
+        $this->destination = $this->prophesize(Timesheet::class);
 
         $this->connector = $connector = new CalendarToTimesheetConnector(
             $this->source,

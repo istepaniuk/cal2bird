@@ -1,6 +1,6 @@
 <?php
 
-namespace CalBird\TimeSheet;
+namespace CalBird\Timesheet;
 
 use ArrayIterator;
 

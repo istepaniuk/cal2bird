@@ -5,15 +5,15 @@ namespace CalBird;
 use CalBird\Calendar\Calendar;
 use CalBird\Calendar\Event;
 use CalBird\Calendar\Summary;
-use CalBird\TimeSheet\TimeEntry;
-use CalBird\TimeSheet\TimeSheet;
+use CalBird\Timesheet\TimeEntry;
+use CalBird\Timesheet\Timesheet;
 
 final class CalendarToTimesheetConnector
 {
     private Calendar $source;
-    private TimeSheet $destination;
+    private Timesheet $destination;
 
-    public function __construct(Calendar $source, TimeSheet $destination)
+    public function __construct(Calendar $source, Timesheet $destination)
     {
         $this->source = $source;
         $this->destination = $destination;
