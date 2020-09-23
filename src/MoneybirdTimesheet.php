@@ -10,6 +10,7 @@ use GuzzleHttp\Client;
 final class MoneybirdTimesheet implements Timesheet
 {
     const MONEYBIRD_API_URL = 'https://moneybird.com/api/v2';
+    const NOTE_PREFIX_FOR_ID = 'cal2bird_id=';
 
     private Client $client;
     private array $requestOptions;
@@ -89,7 +90,7 @@ final class MoneybirdTimesheet implements Timesheet
     private function hasANoteContainingId(array $notes, EntryId $id)
     {
         foreach ($notes as $note) {
-            if ($note['note'] == (string) $id) {
+            if ($note['note'] == self::NOTE_PREFIX_FOR_ID.(string) $id) {
                 return true;
             }
         }
@@ -115,7 +116,7 @@ final class MoneybirdTimesheet implements Timesheet
 
         $noteData = [
             'note' => [
-                'note' => 'cal2bird_id='.(string) $entry->id(),
+                'note' => self::NOTE_PREFIX_FOR_ID.(string) $entry->id(),
                 'todo' => false,
             ],
         ];
