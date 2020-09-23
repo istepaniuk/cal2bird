@@ -2,12 +2,12 @@
 
 namespace CalBird\Tests;
 
-use CalBird\Calendar\Event;
 use CalBird\Calendar\Description;
+use CalBird\Calendar\Event;
 use CalBird\Calendar\EventId;
-use DateTimeImmutable;
 use CalBird\CalendarToTimesheetConnector;
 use CalBird\TimeSheet\TimeSheet;
+use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -55,5 +55,4 @@ final class CalendarToTimesheetConnectorTest extends TestCase
 
         $this->destination->save(Argument::any())->shouldHaveBeenCalledOnce();
     }
-
 }

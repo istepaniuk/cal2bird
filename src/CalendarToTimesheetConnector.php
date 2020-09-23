@@ -2,7 +2,6 @@
 
 namespace CalBird;
 
-
 use CalBird\Calendar\Calendar;
 use CalBird\Calendar\Description;
 use CalBird\TimeSheet\TimeEntry;

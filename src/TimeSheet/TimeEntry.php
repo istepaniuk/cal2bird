@@ -4,5 +4,4 @@ namespace CalBird\TimeSheet;
 
 final class TimeEntry
 {
-
 }

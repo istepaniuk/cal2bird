@@ -2,7 +2,6 @@
 
 namespace CalBird\Tests;
 
-
 use CalBird\Calendar\Calendar;
 use CalBird\Calendar\Event;
 use CalBird\Calendar\Events;
