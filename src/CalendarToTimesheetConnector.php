@@ -3,7 +3,8 @@
 namespace CalBird;
 
 use CalBird\Calendar\Calendar;
-use CalBird\Calendar\Description;
+use CalBird\Calendar\Event;
+use CalBird\Calendar\Summary;
 use CalBird\TimeSheet\TimeEntry;
 use CalBird\TimeSheet\TimeSheet;
 
@@ -18,10 +19,11 @@ final class CalendarToTimesheetConnector
         $this->destination = $destination;
     }
 
-    public function createMatchingTimeEntries(Description $description): void
+    public function createMatchingTimeEntries(Summary $summary): void
     {
+        /** @var Event $event */
         foreach ($this->source->events() as $event) {
-            if ($event->descriptionMatches($description)) {
+            if ($event->summaryMatches($summary)) {
                 $this->destination->save(new TimeEntry());
             }
         }

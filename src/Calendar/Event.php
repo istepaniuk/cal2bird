@@ -7,20 +7,30 @@ use DateTimeInterface;
 final class Event
 {
     private EventId $eventId;
-    private Description $description;
+    private Summary $summary;
     private DateTimeInterface $start;
     private DateTimeInterface $end;
 
-    public function __construct(EventId $eventId, Description $description, DateTimeInterface $start, DateTimeInterface $end)
+    public function __construct(EventId $eventId, Summary $summary, DateTimeInterface $start, DateTimeInterface $end)
     {
         $this->eventId = $eventId;
-        $this->description = $description;
+        $this->summary = $summary;
         $this->start = $start;
         $this->end = $end;
     }
 
-    public function descriptionMatches(Description $description): bool
+    public function summaryMatches(Summary $summary): bool
     {
-        return $description->matches($this->description);
+        return $summary->matches($this->summary);
+    }
+
+    public function summary(): Summary
+    {
+        return $this->summary;
+    }
+
+    public function id(): EventId
+    {
+        return $this->eventId;
     }
 }

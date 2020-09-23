@@ -2,9 +2,9 @@
 
 namespace CalBird\Tests;
 
-use CalBird\Calendar\Description;
 use CalBird\Calendar\Event;
 use CalBird\Calendar\EventId;
+use CalBird\Calendar\Summary;
 use CalBird\CalendarToTimesheetConnector;
 use CalBird\TimeSheet\TimeSheet;
 use DateTimeImmutable;
@@ -35,7 +35,7 @@ final class CalendarToTimesheetConnectorTest extends TestCase
     {
         $this->source->empty();
 
-        $this->connector->createMatchingTimeEntries(Description::fromString('A project'));
+        $this->connector->createMatchingTimeEntries(Summary::fromString('A project'));
 
         $this->destination->save(Argument::any())->shouldNotHaveBeenCalled();
     }
@@ -45,13 +45,13 @@ final class CalendarToTimesheetConnectorTest extends TestCase
         $this->source->add(
             new Event(
                 EventId::fromString('test-id'),
-                Description::fromString('A project'),
+                Summary::fromString('A project'),
                 $start = new DateTimeImmutable('2020-01-01 10:00:00'),
                 $end = new DateTimeImmutable('2020-01-01 12:00:00')
             )
         );
 
-        $this->connector->createMatchingTimeEntries(Description::fromString('A project'));
+        $this->connector->createMatchingTimeEntries(Summary::fromString('A project'));
 
         $this->destination->save(Argument::any())->shouldHaveBeenCalledOnce();
     }
@@ -61,13 +61,13 @@ final class CalendarToTimesheetConnectorTest extends TestCase
         $this->source->add(
             new Event(
                 EventId::fromString('test-id'),
-                Description::fromString('A project'),
+                Summary::fromString('A project'),
                 $start = new DateTimeImmutable('2020-01-01 10:00:00'),
                 $end = new DateTimeImmutable('2020-01-01 12:00:00')
             )
         );
 
-        $this->connector->createMatchingTimeEntries(Description::fromString('Unknown project'));
+        $this->connector->createMatchingTimeEntries(Summary::fromString('Unknown project'));
 
         $this->destination->save(Argument::any())->shouldNotHaveBeenCalled();
     }

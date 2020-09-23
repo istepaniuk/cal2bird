@@ -4,8 +4,20 @@ namespace CalBird\Calendar;
 
 final class EventId
 {
-    public static function fromString(string $string): self
+    private string $id;
+
+    private function __construct(string $id)
     {
-        return new self();
+        $this->id = $id;
+    }
+
+    public static function fromString(string $id): self
+    {
+        return new self($id);
+    }
+
+    public function __toString()
+    {
+        return $this->id;
     }
 }

@@ -10,7 +10,8 @@
         }
     ],
     "require": {
-        "guzzlehttp/guzzle": "^7.1"
+        "guzzlehttp/guzzle": "^7.1",
+        "kigkonsult/icalcreator": "^2.29"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.3",
