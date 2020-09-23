@@ -6,28 +6,23 @@ use CalBird\Calendar\Event;
 use CalBird\Calendar\EventId;
 use CalBird\Calendar\Summary;
 use CalBird\CalendarToTimesheetConnector;
-use CalBird\Timesheet\Timesheet;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
-use Prophecy\PhpUnit\ProphecyTrait;
 
 final class CalendarToTimesheetConnectorTest extends TestCase
 {
-    use ProphecyTrait;
-
     private CalendarToTimesheetConnector $connector;
     private FakeCalendar $source;
-    private $destination;
+    private FakeTimesheet $destination;
 
     public function setUp(): void
     {
         $this->source = new FakeCalendar();
-        $this->destination = $this->prophesize(Timesheet::class);
+        $this->destination = new FakeTimesheet();
 
         $this->connector = $connector = new CalendarToTimesheetConnector(
             $this->source,
-            $this->destination->reveal()
+            $this->destination
         );
     }
 
@@ -37,7 +32,7 @@ final class CalendarToTimesheetConnectorTest extends TestCase
 
         $this->connector->createMatchingTimeEntries(Summary::fromString('A project'));
 
-        $this->destination->save(Argument::any())->shouldNotHaveBeenCalled();
+        self::assertEmpty($this->destination->createdEntries);
     }
 
     public function test_it_creates_a_time_entries_if_an_event_description_matches_the_project_name()
@@ -53,7 +48,7 @@ final class CalendarToTimesheetConnectorTest extends TestCase
 
         $this->connector->createMatchingTimeEntries(Summary::fromString('A project'));
 
-        $this->destination->save(Argument::any())->shouldHaveBeenCalledOnce();
+        self::assertNotEmpty($this->destination->createdEntries);
     }
 
     public function test_it_does_not_creates_a_time_entry_if_the_event_description_does_not_match()
@@ -69,6 +64,6 @@ final class CalendarToTimesheetConnectorTest extends TestCase
 
         $this->connector->createMatchingTimeEntries(Summary::fromString('Unknown project'));
 
-        $this->destination->save(Argument::any())->shouldNotHaveBeenCalled();
+        self::assertEmpty($this->destination->createdEntries);
     }
 }
