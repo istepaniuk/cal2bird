@@ -26,12 +26,12 @@ final class CalendarToTimesheetConnector
         /** @var Event $event */
         foreach ($this->source->events() as $event) {
             if ($event->summaryMatches($summary)) {
-                $this->destination->save($this->timesheetEntryFromCalendarEntry($event));
+                $this->destination->save($this->timeEntryFromCalendarEvent($event));
             }
         }
     }
 
-    private function timesheetEntryFromCalendarEntry(Event $event): TimeEntry
+    private function timeEntryFromCalendarEvent(Event $event): TimeEntry
     {
         return new TimeEntry(
             EntryId::fromString((string) $event->id()),

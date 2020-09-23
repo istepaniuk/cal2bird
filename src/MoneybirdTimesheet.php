@@ -6,6 +6,8 @@ use CalBird\Timesheet\EntryId;
 use CalBird\Timesheet\TimeEntry;
 use CalBird\Timesheet\Timesheet;
 use GuzzleHttp\Client;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 final class MoneybirdTimesheet implements Timesheet
 {
@@ -16,8 +18,9 @@ final class MoneybirdTimesheet implements Timesheet
     private array $requestOptions;
     private string $administrationId = '';
     private string $userId = '';
+    private LoggerInterface $logger;
 
-    public function __construct(string $bearerToken)
+    public function __construct(string $bearerToken, ?LoggerInterface $logger = null)
     {
         $this->client = new Client(
             [
@@ -31,12 +34,17 @@ final class MoneybirdTimesheet implements Timesheet
                 'Content-Type' => 'application/json',
             ],
         ];
+
+        $this->logger = $logger ?? new NullLogger();
     }
 
     public function save(TimeEntry $entry): void
     {
         if (!$this->entryExists($entry)) {
             $this->createEntry($entry);
+            $this->logger->info('Entry created: '.$entry->id());
+        } else {
+            $this->logger->info('Skipped: '.$entry->id());
         }
     }
 
@@ -57,6 +65,7 @@ final class MoneybirdTimesheet implements Timesheet
         );
         $decoded = json_decode($response->getBody());
         $this->administrationId = reset($decoded)->id;
+        $this->logger->info('Administration ID is:'.$this->administrationId);
 
         return $this->administrationId;
     }
@@ -111,7 +120,6 @@ final class MoneybirdTimesheet implements Timesheet
         ];
 
         $result = $this->request('POST', '/time_entries.json', json_encode($timeEntryData));
-        var_dump($result);
         $moneybirdTimeEntryId = $result['id'];
 
         $noteData = [
