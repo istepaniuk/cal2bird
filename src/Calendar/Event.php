@@ -33,4 +33,14 @@ final class Event
     {
         return $this->eventId;
     }
+
+    public function start(): DateTimeInterface
+    {
+        return $this->start;
+    }
+
+    public function end(): DateTimeInterface
+    {
+        return $this->end;
+    }
 }
