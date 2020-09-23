@@ -2,11 +2,13 @@
 
 namespace CalBird\Tests;
 
-use CalBird\Calendar;
+use CalBird\Calendar\Calendar;
+use CalBird\Calendar\Events;
 
 final class FakeAndEmptyCalendar implements Calendar
 {
-    public function __construct()
+    public function events(): Events
     {
+        return Events::empty();
     }
 }

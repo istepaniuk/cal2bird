@@ -2,7 +2,7 @@
 
 namespace CalBird\MoneyBird;
 
-interface TimeSheets
+interface TimeSheet
 {
     public function save(TimeEntry $entry): void;
 }

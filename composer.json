@@ -10,7 +10,6 @@
         }
     ],
     "require": {
-        "kigkonsult/icalcreator": "^2.29",
         "guzzlehttp/guzzle": "^7.1"
     },
     "require-dev": {
@@ -19,8 +18,12 @@
     },
     "autoload": {
         "psr-4": {
-            "CalBird\\Tests\\": "tests/",
-            "CalBird\\": "src/"
+            "CalBird\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "CalBird\\Tests\\": "tests"
         }
     }
 }
