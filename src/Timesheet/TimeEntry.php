@@ -38,4 +38,14 @@ final class TimeEntry
     {
         return $this->description;
     }
+
+    public function __toString()
+    {
+        return sprintf(
+            '[%s] %s - %s',
+            (string) $this->id,
+            (string) $this->description,
+            $this->start->format(DATE_ATOM)
+        );
+    }
 }

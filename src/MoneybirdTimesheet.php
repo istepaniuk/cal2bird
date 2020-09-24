@@ -19,6 +19,8 @@ final class MoneybirdTimesheet implements Timesheet
     private string $administrationId = '';
     private string $userId = '';
     private LoggerInterface $logger;
+    private array $cachedEntries = [];
+    private array $projectIdsByName = [];
 
     public function __construct(string $bearerToken, ?LoggerInterface $logger = null)
     {
@@ -42,9 +44,9 @@ final class MoneybirdTimesheet implements Timesheet
     {
         if (!$this->entryExists($entry)) {
             $this->createEntry($entry);
-            $this->logger->info('Entry created: '.$entry->id());
+            $this->logger->info('Created: '.$entry);
         } else {
-            $this->logger->info('Skipped: '.$entry->id());
+            $this->logger->info('Skipped: '.$entry);
         }
     }
 
@@ -65,7 +67,7 @@ final class MoneybirdTimesheet implements Timesheet
         );
         $decoded = json_decode($response->getBody());
         $this->administrationId = reset($decoded)->id;
-        $this->logger->info('Administration ID is:'.$this->administrationId);
+        $this->logger->debug('Administration ID is: '.$this->administrationId);
 
         return $this->administrationId;
     }
@@ -82,10 +84,24 @@ final class MoneybirdTimesheet implements Timesheet
         return $this->userId;
     }
 
+    private function projectIdByName(string $name): string
+    {
+        if (isset($this->projectIdsByName[$name])) {
+            return $this->projectIdsByName[$name];
+        }
+
+        $projects = $this->request('GET', '/projects.json?filter=state:active');
+        foreach ($projects as $project) {
+            $this->projectIdsByName[$project['name']] = $project['id'];
+            $this->logger->debug('- Found project:'.$project['name'].': '.$project['id']);
+        }
+
+        return $this->projectIdsByName[$name];
+    }
+
     private function entryExists(TimeEntry $entry)
     {
-        $date = $entry->start()->format('Ymd');
-        $results = $this->request('GET', "/time_entries.json?filter=date%3A$date");
+        $results = $this->entriesForTheWeekOfDate($entry->start());
 
         foreach ($results as $result) {
             if ($this->hasANoteContainingId($result['notes'] ?? [], $entry->id())) {
@@ -115,6 +131,7 @@ final class MoneybirdTimesheet implements Timesheet
                 'ended_at' => $entry->end()->format(DATE_ATOM),
                 'user_id' => $this->userId(),
                 'description' => (string) $entry->description(),
+                'project_id' => $this->projectIdByName($entry->description()),
                 'billable' => true,
             ],
         ];
@@ -146,5 +163,20 @@ final class MoneybirdTimesheet implements Timesheet
         );
 
         return json_decode($response->getBody(), true);
+    }
+
+    private function entriesForTheWeekOfDate(\DateTimeInterface $date)
+    {
+        $formattedDate = $date->format('Y-m-d');
+        if (isset($this->cachedEntries[$formattedDate])) {
+            return $this->cachedEntries[$formattedDate];
+        }
+
+        $entries = $this->request('GET', "/time_entries.json?filter=day:$formattedDate");
+        $this->cachedEntries[$formattedDate] = $entries;
+        $count = \count($entries);
+        $this->logger->debug(" - Found $count entries for date $formattedDate");
+
+        return $entries;
     }
 }
