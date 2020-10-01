@@ -30,7 +30,7 @@ final class CalendarToTimesheetConnectorTest extends TestCase
     {
         $this->source->empty();
 
-        $this->connector->createMatchingTimeEntries(Summary::fromString('A project'));
+        $this->connector->createMatchingTimeEntries(Summary::fromString('A project'), new DateTimeImmutable('2001'));
 
         self::assertEmpty($this->destination->createdEntries);
     }
@@ -46,7 +46,7 @@ final class CalendarToTimesheetConnectorTest extends TestCase
             )
         );
 
-        $this->connector->createMatchingTimeEntries(Summary::fromString('A project'));
+        $this->connector->createMatchingTimeEntries(Summary::fromString('A project'), new DateTimeImmutable('2001'));
 
         self::assertCount(1, $this->destination->createdEntries);
         $addedEntry = reset($this->destination->createdEntries);
@@ -67,7 +67,7 @@ final class CalendarToTimesheetConnectorTest extends TestCase
             )
         );
 
-        $this->connector->createMatchingTimeEntries(Summary::fromString('Unknown project'));
+        $this->connector->createMatchingTimeEntries(Summary::fromString('Unknown project'), new DateTimeImmutable('2001'));
 
         self::assertEmpty($this->destination->createdEntries);
     }

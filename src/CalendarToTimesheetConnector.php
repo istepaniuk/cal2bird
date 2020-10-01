@@ -9,6 +9,7 @@ use CalBird\Timesheet\Description;
 use CalBird\Timesheet\EntryId;
 use CalBird\Timesheet\TimeEntry;
 use CalBird\Timesheet\Timesheet;
+use DateTimeInterface;
 
 final class CalendarToTimesheetConnector
 {
@@ -21,10 +22,10 @@ final class CalendarToTimesheetConnector
         $this->destination = $destination;
     }
 
-    public function createMatchingTimeEntries(Summary $summary): void
+    public function createMatchingTimeEntries(Summary $summary, DateTimeInterface $from): void
     {
         /** @var Event $event */
-        foreach ($this->source->events() as $event) {
+        foreach ($this->source->events($from) as $event) {
             if ($event->summaryMatches($summary)) {
                 $this->destination->save($this->timeEntryFromCalendarEvent($event));
             }

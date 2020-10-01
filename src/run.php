@@ -4,6 +4,7 @@
 namespace CalBird;
 
 use CalBird\Calendar\Summary;
+use DateTimeImmutable;
 use Symfony\Component\Console\Logger\ConsoleLogger;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
@@ -15,4 +16,4 @@ $connector = new CalendarToTimesheetConnector(
     new MoneybirdTimesheet($argv[1], $logger)
 );
 
-$connector->createMatchingTimeEntries(Summary::fromString($argv[2]));
+$connector->createMatchingTimeEntries(Summary::fromString($argv[2]), new DateTimeImmutable($argv[3]));

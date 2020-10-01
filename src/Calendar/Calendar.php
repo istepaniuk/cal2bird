@@ -2,7 +2,9 @@
 
 namespace CalBird\Calendar;
 
+use DateTimeInterface;
+
 interface Calendar
 {
-    public function events(): Events;
+    public function events(DateTimeInterface $from): Events;
 }

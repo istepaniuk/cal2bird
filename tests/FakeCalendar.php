@@ -15,7 +15,7 @@ final class FakeCalendar implements Calendar
         $this->events = Events::fromArray(...$event);
     }
 
-    public function events(): Events
+    public function events(\DateTimeInterface $from): Events
     {
         return $this->events;
     }
