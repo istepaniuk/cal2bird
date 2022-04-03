@@ -13,4 +13,5 @@ COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 WORKDIR /app
 RUN /usr/local/bin/composer install --prefer-dist --no-progress --no-suggest
 
-ENTRYPOINT ["/usr/local/bin/php", "/app/src/run.php"]
+COPY ./entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
