@@ -16,4 +16,9 @@ $connector = new CalendarToTimesheetConnector(
     new MoneybirdTimesheet($argv[1], $logger)
 );
 
-$connector->createMatchingTimeEntries(Summary::fromString($argv[2]), new DateTimeImmutable($argv[3]));
+if ($argv[4] ?? "" == "--non-billable") {
+    $connector->createAllTimeEntriesIntoNonBillable(new DateTimeImmutable($argv[3]));
+} else {
+    $connector->createMatchingTimeEntries(Summary::fromString($argv[2]), new DateTimeImmutable($argv[3]));
+}
+

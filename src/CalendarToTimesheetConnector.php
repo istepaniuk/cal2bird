@@ -7,6 +7,7 @@ use CalBird\Calendar\Event;
 use CalBird\Calendar\Summary;
 use CalBird\Timesheet\Description;
 use CalBird\Timesheet\EntryId;
+use CalBird\Timesheet\Project;
 use CalBird\Timesheet\TimeEntry;
 use CalBird\Timesheet\Timesheet;
 use DateTimeInterface;
@@ -34,11 +35,47 @@ final class CalendarToTimesheetConnector
 
     private function timeEntryFromCalendarEvent(Event $event): TimeEntry
     {
+
         return new TimeEntry(
             EntryId::fromString((string) $event->id()),
             $event->start(),
             $event->end(),
-            Description::fromString((string) $event->summary())
+            $this->timeEntryDescriptionFromEventDescription($event),
+            Project::fromString((string) $event->summary())
         );
+    }
+
+    public function createAllTimeEntriesIntoNonBillable(DateTimeInterface $from): void
+    {
+        /** @var Event $event */
+        foreach ($this->source->events($from) as $event) {
+            $this->destination->save($this->nonBillableTimeEntryFromCalendarEvent($event));
+        }
+    }
+
+    private function nonBillableTimeEntryFromCalendarEvent(Event $event): TimeEntry
+    {
+        $description = (string) $event->summary();
+        if (!$event->description()->isEmpty()) {
+            $description .= ': '.$event->description();
+        }
+
+        return new TimeEntry(
+            EntryId::fromString((string) $event->id()),
+            $event->start(),
+            $event->end(),
+            Description::fromString($description),
+            Project::none(),
+            false
+        );
+    }
+
+    private function timeEntryDescriptionFromEventDescription(Event $event): Description
+    {
+        if ($event->description()->isEmpty()) {
+            return Description::fromString((string) $event->summary());
+        }
+
+        return Description::fromString((string) $event->description());
     }
 }

@@ -13,12 +13,12 @@ final class TimeEntries implements \IteratorAggregate
         $this->entries = $entries;
     }
 
-    public static function fromArray(TimeEntry ...$entries)
+    public static function fromArray(TimeEntry ...$entries): self
     {
-        new self($entries);
+        return new self($entries);
     }
 
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->entries);
     }

@@ -8,20 +8,27 @@ final class Event
 {
     private EventId $eventId;
     private Summary $summary;
+    private Description $description;
     private DateTimeInterface $start;
     private DateTimeInterface $end;
 
-    public function __construct(EventId $eventId, Summary $summary, DateTimeInterface $start, DateTimeInterface $end)
-    {
+    public function __construct(
+        EventId $eventId,
+        Summary $summary,
+        Description $description,
+        DateTimeInterface $start,
+        DateTimeInterface $end
+    ) {
         $this->eventId = $eventId;
         $this->summary = $summary;
+        $this->description = $description;
         $this->start = $start;
         $this->end = $end;
     }
 
-    public function summaryMatches(Summary $summary): bool
+    public function id(): EventId
     {
-        return $summary->matches($this->summary);
+        return $this->eventId;
     }
 
     public function summary(): Summary
@@ -29,9 +36,9 @@ final class Event
         return $this->summary;
     }
 
-    public function id(): EventId
+    public function description(): Description
     {
-        return $this->eventId;
+        return $this->description;
     }
 
     public function start(): DateTimeInterface
@@ -42,5 +49,10 @@ final class Event
     public function end(): DateTimeInterface
     {
         return $this->end;
+    }
+
+    public function summaryMatches(Summary $summary): bool
+    {
+        return $summary->matches($this->summary);
     }
 }

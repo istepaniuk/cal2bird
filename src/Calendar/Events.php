@@ -6,6 +6,9 @@ use ArrayIterator;
 
 final class Events implements \IteratorAggregate
 {
+    /**
+     * @var Event[]
+     */
     private array $events;
 
     private function __construct(Event ...$events)
@@ -23,7 +26,7 @@ final class Events implements \IteratorAggregate
         return new self();
     }
 
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->events);
     }

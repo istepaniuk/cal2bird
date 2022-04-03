@@ -10,13 +10,23 @@ final class TimeEntry
     private DateTimeInterface $start;
     private DateTimeInterface $end;
     private Description $description;
+    private Project $project;
+    private bool $billable;
 
-    public function __construct(EntryId $id, DateTimeInterface $start, DateTimeInterface $end, Description $description)
-    {
+    public function __construct(
+        EntryId $id,
+        DateTimeInterface $start,
+        DateTimeInterface $end,
+        Description $description,
+        Project $project,
+        bool $billable = true
+    ) {
         $this->id = $id;
         $this->start = $start;
         $this->end = $end;
         $this->description = $description;
+        $this->project = $project;
+        $this->billable = $billable;
     }
 
     public function id(): EntryId
@@ -39,10 +49,21 @@ final class TimeEntry
         return $this->description;
     }
 
-    public function __toString()
+    public function project(): Project
+    {
+        return $this->project;
+    }
+
+    public function billable(): bool
+    {
+        return $this->billable;
+    }
+
+    public function __toString(): string
     {
         return sprintf(
-            '[%s] %s - %s',
+            '[%s] %s %s - %s',
+            (string) $this->project,
             (string) $this->id,
             (string) $this->description,
             $this->start->format(DATE_ATOM)

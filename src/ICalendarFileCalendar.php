@@ -3,6 +3,7 @@
 namespace CalBird;
 
 use CalBird\Calendar\Calendar;
+use CalBird\Calendar\Description;
 use CalBird\Calendar\Event;
 use CalBird\Calendar\EventId;
 use CalBird\Calendar\Events;
@@ -41,7 +42,7 @@ final class ICalendarFileCalendar implements Calendar
         );
     }
 
-    public function flattenArray(array $array)
+    public function flattenArray(array $array): array
     {
         $return = [];
         array_walk_recursive(
@@ -59,6 +60,7 @@ final class ICalendarFileCalendar implements Calendar
         return new Event(
             EventId::fromString($vevent->getUid()),
             Summary::fromString($vevent->getSummary()),
+            Description::fromString($vevent->getDescription()),
             $vevent->getDtstart(),
             $vevent->getDtend()
         );

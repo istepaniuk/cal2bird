@@ -16,7 +16,7 @@ final class EntryId
         return new self($id);
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->id;
     }

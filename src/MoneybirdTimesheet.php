@@ -131,10 +131,13 @@ final class MoneybirdTimesheet implements Timesheet
                 'ended_at' => $entry->end()->format(DATE_ATOM),
                 'user_id' => $this->userId(),
                 'description' => (string) $entry->description(),
-                'project_id' => $this->projectIdByName($entry->description()),
-                'billable' => true,
+                'billable' => $entry->billable(),
             ],
         ];
+
+        if (!$entry->project()->isNone()) {
+            $timeEntryData['time_entry']['project_id'] = $this->projectIdByName($entry->project());
+        }
 
         $result = $this->request('POST', '/time_entries.json', json_encode($timeEntryData));
         $moneybirdTimeEntryId = $result['id'];

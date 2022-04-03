@@ -1,6 +1,6 @@
 <?php
 
-namespace CalBird\Timesheet;
+namespace CalBird\Calendar;
 
 final class Description
 {
@@ -13,15 +13,21 @@ final class Description
 
     public static function fromString(string $description): self
     {
-        if(empty($description)){
-            throw new \InvalidArgumentException('Description cannot be empty');
-        }
-
         return new self($description);
+    }
+
+    public static function empty(): self
+    {
+        return new self('');
     }
 
     public function __toString(): string
     {
         return $this->description;
+    }
+
+    public function isEmpty(): bool
+    {
+        return empty($this->description);
     }
 }
