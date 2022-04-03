@@ -2,6 +2,7 @@
 
 namespace CalBird\Tests;
 
+use CalBird\Calendar\Description;
 use CalBird\Calendar\Event;
 use CalBird\Calendar\EventId;
 use CalBird\Calendar\Summary;
@@ -41,33 +42,63 @@ final class CalendarToTimesheetConnectorTest extends TestCase
             new Event(
                 EventId::fromString($id = 'test-id'),
                 Summary::fromString($summary = 'A project'),
+                Description::fromString($description = 'Some longer description'),
                 $start = new DateTimeImmutable('2020-01-01 10:00:00'),
                 $end = new DateTimeImmutable('2020-01-01 12:00:00')
             )
         );
 
-        $this->connector->createMatchingTimeEntries(Summary::fromString('A project'), new DateTimeImmutable('2001'));
+        $this->connector->createMatchingTimeEntries(
+            Summary::fromString('A project'),
+            new DateTimeImmutable('2001')
+        );
 
         self::assertCount(1, $this->destination->createdEntries);
         $addedEntry = reset($this->destination->createdEntries);
         self::assertEquals($id, $addedEntry->id());
-        self::assertEquals($summary, $addedEntry->description());
+        self::assertEquals($summary, $addedEntry->project());
+        self::assertEquals($description, $addedEntry->description());
         self::assertEquals($start, $addedEntry->start());
         self::assertEquals($end, $addedEntry->end());
     }
 
-    public function test_it_does_not_creates_a_time_entry_if_the_event_description_does_not_match()
+    public function test_it_uses_the_summary_as_description_if_there_is_no_description()
+    {
+        $this->source->add(
+            new Event(
+                EventId::fromString('test-id'),
+                Summary::fromString($summary = 'A project'),
+                Description::empty(),
+                $start = new DateTimeImmutable('2020-01-01 10:00:00'),
+                $end = new DateTimeImmutable('2020-01-01 12:00:00')
+            )
+        );
+
+        $this->connector->createMatchingTimeEntries(
+            Summary::fromString('A project'),
+            new DateTimeImmutable('2001')
+        );
+
+        $addedEntry = reset($this->destination->createdEntries);
+        self::assertEquals($summary, $addedEntry->description());
+    }
+
+    public function test_it_does_not_creates_a_time_entry_if_the_event_summary_does_not_match()
     {
         $this->source->add(
             new Event(
                 EventId::fromString('test-id'),
                 Summary::fromString('A project'),
+                Description::fromString('Description'),
                 $start = new DateTimeImmutable('2020-01-01 10:00:00'),
                 $end = new DateTimeImmutable('2020-01-01 12:00:00')
             )
         );
 
-        $this->connector->createMatchingTimeEntries(Summary::fromString('Unknown project'), new DateTimeImmutable('2001'));
+        $this->connector->createMatchingTimeEntries(
+            Summary::fromString('Unknown project'),
+            new DateTimeImmutable('2001')
+        );
 
         self::assertEmpty($this->destination->createdEntries);
     }
