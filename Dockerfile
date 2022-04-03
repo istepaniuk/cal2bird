@@ -11,6 +11,6 @@ COPY ./composer.lock /app/composer.lock
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
 WORKDIR /app
-RUN /usr/local/bin/composer install
+RUN /usr/local/bin/composer install --prefer-dist --no-progress --no-suggest
 
 ENTRYPOINT ["/usr/local/bin/php", "/app/src/run.php"]
